@@ -7,27 +7,25 @@ class Rps < Sinatra::Base
     register Sinatra::Reloader
   end
 
+  enable :sessions
+
   get '/' do
+    session[:name] = params[:name]
     erb :index
   end
 
   post '/welcome' do
-    @name = params[:name]
+    session[:name] = params[:name]
+    @name = session[:name]
     erb :welcome
   end
 
-  get '/win' do
-    @name = params[:name]
-    erb :win
-  end
-
-  get '/lose' do
+  get '/play' do
     game = Game.new
     @random = game.random
     @player_score = game.player_score
     @result1 = game.result1
-    
-    erb :lose
+    erb :play
   end
 
   run! if app_file == $0
